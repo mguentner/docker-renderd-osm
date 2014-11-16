@@ -1,0 +1,12 @@
+#!/bin/bash
+exec 2>&1
+source /etc/envvars
+sed -i "s/^XML=.*/XML=\/usr\/share\/mapnik\/openstreetmap-carto-$OSM_CARTO_VERSION\/style.xml/" /usr/local/etc/renderd.conf
+sed -i "s/^HOST=.*/HOST=localhost/" /usr/local/etc/renderd.conf
+sed -i "s/^plugins_dir=.*/plugins_dir=\/usr\/lib\/mapnik\/2.2\/input\//" /usr/local/etc/renderd.conf
+
+cd /usr/share/mapnik/openstreetmap-carto-$OSM_CARTO_VERSION/
+cp project.mml.orig project.mml
+sed -i "s/\"dbname\": \"gis\"/\"host\": \"$PG_PORT_5432_TCP_ADDR\",\n\"port\": \"$PG_PORT_5432_TCP_PORT\",\n\"user\": \"$PG_ENV_OSM_USER\",\n\"dbname\":\"$PG_ENV_OSM_DB\"/" project.mml
+carto project.mml > style.xml
+exec sudo -u www-data LD_LIBRARY_PATH=/usr/local/lib/ /usr/local/bin/renderd -f --config /usr/local/etc/renderd.conf
