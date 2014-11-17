@@ -3,14 +3,12 @@
 FROM debian:jessie
 MAINTAINER Maximilian Güntner <maximilian.guentner@gmail.com>
 
-ENV DEBIAN_FRONTEND noninteractive
-
 ENV OSM_CARTO_VERSION 2.24.0
 ENV MOD_TILE_VERSION master
 ENV PARALLEL_BUILD 4
 
 RUN touch /etc/inittab
-RUN apt-get update && apt-get install -y -q autoconf libtool libmapnik-dev apache2-dev curl unzip gdal-bin mapnik-utils node-carto apache2 wget runit sudo
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q autoconf libtool libmapnik-dev apache2-dev curl unzip gdal-bin mapnik-utils node-carto apache2 wget runit sudo
 
 RUN cd /tmp && wget https://github.com/gravitystorm/openstreetmap-carto/archive/v$OSM_CARTO_VERSION.tar.gz && tar -xzf v$OSM_CARTO_VERSION.tar.gz
 RUN mkdir /usr/share/mapnik && mv /tmp/openstreetmap-carto-$OSM_CARTO_VERSION /usr/share/mapnik/
@@ -34,6 +32,8 @@ RUN ln -s /etc/apache2/mods-available/tile.load /etc/apache2/mods-enabled/
 
 COPY runit_bootstrap /usr/sbin/runit_bootstrap
 RUN chmod 755 /usr/sbin/runit_bootstrap
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 EXPOSE 80
 ENTRYPOINT ["/usr/sbin/runit_bootstrap"]
