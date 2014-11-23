@@ -25,7 +25,14 @@ Now, start the renderd container and link them together:
     # docker run -i -t -p 8080:80 --link postgres-osm:pg  mguentner/renderd-osm:latest
 
 Once the container is up you should be able to see a small map of the
-world once you point your browser to [http://127.0.0.1:8080/osm_tiles/0/0/0.png](http://127.0.0.1:8080/osm_tiles/0/0/0.png)
+world once you point your browser to [http://127.0.0.1:8080/osm/0/0/0.png](http://127.0.0.1:8080/osm/0/0/0.png)
+
+## Available Styles
+
+ * [openstreetmap-carto](https://github.com/gravitystorm/openstreetmap-carto),
+   available at [http://host/osm/0/0/0.png](http://host/osm/0/0/0.png)
+ * [osm-bright](https://github.com/mapbox/osm-bright)
+   available at [http://host/osmb/0/0/0.png](http://host/osmb/0/0/0.png)
 
 ## About
 
