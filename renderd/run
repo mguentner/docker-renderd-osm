@@ -15,6 +15,7 @@ cp project.mml.orig project.mml
 sed -i "s/\"dbname\": \"gis\"/\"host\": \"$PG_PORT_5432_TCP_ADDR\",\n \
 \"port\": \"$PG_PORT_5432_TCP_PORT\",\n \
 \"user\": \"$PG_ENV_OSM_USER\",\n \
+\"password\": \"$PG_ENV_OSM_PASSWORD\",\n \
 \"dbname\":\"$PG_ENV_OSM_DB\"/" project.mml
 carto project.mml > style.xml
 
@@ -26,7 +27,8 @@ sed -i -e "s|^config\[\"path\"\].*|config\[\"path\"\] = \"$(pwd)\"|" \
        -e "s/^config\[\"postgis\"\]\[\"host\"\].*/config\[\"postgis\"\]\[\"host\"\] = \"$PG_PORT_5432_TCP_ADDR\"/" \
        -e "s/^config\[\"postgis\"\]\[\"port\"\].*/config\[\"postgis\"\]\[\"port\"\] = \"$PG_PORT_5432_TCP_PORT\"/" \
        -e "s/^config\[\"postgis\"\]\[\"dbname\"\].*/config\[\"postgis\"\]\[\"dbname\"\] = \"$PG_ENV_OSM_DB\"/" \
-       -e "s/^config\[\"postgis\"\]\[\"user\"\].*/config\[\"postgis\"\]\[\"user\"\] = \"$PG_ENV_OSM_USER\"/" configure.py
+       -e "s/^config\[\"postgis\"\]\[\"user\"\].*/config\[\"postgis\"\]\[\"user\"\] = \"$PG_ENV_OSM_USER\"/" \
+       -e "s/^config\[\"postgis\"\]\[\"password\"\].*/config\[\"postgis\"\]\[\"password\"\] = \"$PG_ENV_OSM_PASSWORD\"/" configure.py
 
 ./make.py
 cd OSMBright
